@@ -25,6 +25,7 @@ BuildRequires: dbus-devel
 BuildRequires: dbus-glib >= 0.60
 BuildRequires: networkmanager-devel
 %endif
+Buildroot: %{_tmppath}/ypbind-root
 
 %description
 The Network Information Service (NIS) is a system which provides
