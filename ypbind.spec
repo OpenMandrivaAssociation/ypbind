@@ -3,14 +3,14 @@
 
 Summary: The NIS daemon which binds NIS clients to an NIS domain
 Name: ypbind
-Version: 1.20.2
-Release: %mkrel 4
+Version: 1.20.4
+Release: %mkrel 1
 Epoch: 3
 License: GPL
 Group: System/Servers
 URL: http://www.linux-nis.org/nis/ypbind-mt/index.html
-Source0: ftp.kernel.org:/pub/linux/utils/net/NIS/ypbind-mt-%{PACKAGE_VERSION}.tar.bz2
-Source3: ftp.kernel.org:/pub/linux/utils/net/NIS/ypbind-mt-%{PACKAGE_VERSION}.tar.bz2.sign
+Source0: ftp://ftp.kernel.org/pub/linux/utils/net/NIS/ypbind-mt-%{PACKAGE_VERSION}.tar.bz2
+Source3: ftp://ftp.kernel.org/pub/linux/utils/net/NIS/ypbind-mt-%{PACKAGE_VERSION}.tar.bz2.sign
 Source1: ypbind.init
 Source2: yp.conf
 Patch1: ypbind-1.11-broadcast.patch
