@@ -4,7 +4,7 @@
 Summary: The NIS daemon which binds NIS clients to an NIS domain
 Name: ypbind
 Version: 1.29.91
-Release: %mkrel 2
+Release: %mkrel 3
 Epoch: 3
 License: GPL
 Group: System/Servers
@@ -83,7 +83,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_initrddir}/*
 %config(noreplace) %{_sysconfdir}/yp.conf
 %dir /var/yp/binding
-%doc README
+%doc README ChangeLog AUTHORS THANKS NEWS
 
 
 
