@@ -55,20 +55,20 @@ network.
 %make
 
 %install
-rm -rf $RPM_BUILD_ROOT
-%makeinstall sbindir=$RPM_BUILD_ROOT/sbin
+rm -rf %{buildroot}
+%makeinstall sbindir=%{buildroot}/sbin
 
-mkdir -p $RPM_BUILD_ROOT%{_initrddir}
-install -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/ypbind
-install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/yp.conf
-mkdir -p $RPM_BUILD_ROOT/var/yp/binding
+mkdir -p %{buildroot}%{_initrddir}
+install -m 755 %{SOURCE1} %{buildroot}%{_initrddir}/ypbind
+install -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/yp.conf
+mkdir -p %{buildroot}/var/yp/binding
 
-perl -pi -e "s|/etc/rc.d/init.d|%{_initrddir}|" $RPM_BUILD_ROOT%{_initrddir}/*
+perl -pi -e "s|/etc/rc.d/init.d|%{_initrddir}|" %{buildroot}%{_initrddir}/*
 
 %find_lang %{name}
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %post
 %_post_service ypbind
