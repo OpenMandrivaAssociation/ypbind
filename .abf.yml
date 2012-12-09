@@ -1,5 +1,2 @@
 sources:
-  "ypbind.init:"	1c137ef78252f67b85e3159697aa1bdddd8b5336
-  "ypbind-mt-1.29.91.tar.gz:"	89eafc3c844aeaefb30d076e502ad64ac4510c90
-  "ypbind-mt-1.29.91.tar.gz.sign:"	266c76c66cfa10c12bba02fdcc5991472ba4d726
-  "yp.conf:"	5f3400172939a49c4df48c3eca41ea1913c2b289
+  "ypbind-mt-1.29.91.tar.gz": 89eafc3c844aeaefb30d076e502ad64ac4510c90
