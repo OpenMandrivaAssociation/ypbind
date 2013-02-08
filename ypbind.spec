@@ -1,30 +1,30 @@
 # Rebuild with  '--with dbus' to enbale dbus/Netwrokmanager support
 %global nodbus_support %{?_with_dbus: %nil}%{?!_with_dbus: --disable-dbus-nm}
 
-Summary: The NIS daemon which binds NIS clients to an NIS domain
-Name: ypbind
-Version: 1.32
-Release: 1
-Epoch: 3
-License: GPL
-Group: System/Servers
-URL: http://www.linux-nis.org/nis/ypbind-mt/index.html
-Source0: ftp://ftp.kernel.org/pub/linux/utils/net/NIS/ypbind-mt-%{PACKAGE_VERSION}.tar.bz2
-Source1: ypbind.init
-Source2: yp.conf
-Patch0: ypbind-mt-1.32-link-tirpc.patch
-Patch1: ypbind-mt-1.32-automake-1.13.patch
-Patch2: ypbind-1.11-gettextdomain.patch
-Requires(post): rpm-helper
-Requires(preun): rpm-helper
-Requires: rpcbind
-Requires: yp-tools
+Summary:	The NIS daemon which binds NIS clients to an NIS domain
+Name:		ypbind
+Version:	1.32
+Release:	1
+Epoch:		3
+License:	GPL
+Group:		System/Servers
+URL:		http://www.linux-nis.org/nis/ypbind-mt/index.html
+Source0:	ftp://ftp.kernel.org/pub/linux/utils/net/NIS/ypbind-mt-%{PACKAGE_VERSION}.tar.bz2
+Source1:	ypbind.init
+Source2:	yp.conf
+Patch0:		ypbind-mt-1.32-link-tirpc.patch
+Patch1:		ypbind-mt-1.32-automake-1.13.patch
+Patch2:		ypbind-1.11-gettextdomain.patch
+Requires(post):	rpm-helper
+Requires(preun):	rpm-helper
+Requires:	rpcbind
+Requires:	yp-tools
 %if %{?nodbus_support: 0}%{?!nodbus_support: 1}
-BuildRequires: dbus-devel
-BuildRequires: dbus-glib >= 0.60
-BuildRequires: networkmanager-devel
-BuildRequires:	tirpc-devel
+BuildRequires:	dbus-devel
+BuildRequires:	dbus-glib >= 0.60
+BuildRequires:	networkmanager-devel
 %endif
+BuildRequires:	tirpc-devel
 
 %track
 prog %name = {
@@ -64,7 +64,6 @@ autoconf
 %make
 
 %install
-rm -rf $RPM_BUILD_ROOT
 %makeinstall sbindir=$RPM_BUILD_ROOT/sbin
 
 mkdir -p $RPM_BUILD_ROOT%{_initrddir}
@@ -75,9 +74,6 @@ mkdir -p $RPM_BUILD_ROOT/var/yp/binding
 perl -pi -e "s|/etc/rc.d/init.d|%{_initrddir}|" $RPM_BUILD_ROOT%{_initrddir}/*
 
 %find_lang %{name}
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %post
 %_post_service ypbind
