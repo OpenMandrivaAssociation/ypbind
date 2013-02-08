@@ -3,17 +3,17 @@
 
 Summary: The NIS daemon which binds NIS clients to an NIS domain
 Name: ypbind
-Version: 1.29.91
-Release: %mkrel 5
+Version: 1.32
+Release: 1
 Epoch: 3
 License: GPL
 Group: System/Servers
 URL: http://www.linux-nis.org/nis/ypbind-mt/index.html
-Source0: ftp://ftp.kernel.org/pub/linux/utils/net/NIS/ypbind-mt-%{PACKAGE_VERSION}.tar.gz
-Source3: ftp://ftp.kernel.org/pub/linux/utils/net/NIS/ypbind-mt-%{PACKAGE_VERSION}.tar.gz.sign
+Source0: ftp://ftp.kernel.org/pub/linux/utils/net/NIS/ypbind-mt-%{PACKAGE_VERSION}.tar.bz2
 Source1: ypbind.init
 Source2: yp.conf
-Patch0: ypbind-broadcast-get-server.patch
+Patch0: ypbind-mt-1.32-link-tirpc.patch
+Patch1: ypbind-mt-1.32-automake-1.13.patch
 Patch2: ypbind-1.11-gettextdomain.patch
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
@@ -24,7 +24,13 @@ BuildRequires: dbus-devel
 BuildRequires: dbus-glib >= 0.60
 BuildRequires: networkmanager-devel
 %endif
-Buildroot: %{_tmppath}/ypbind-root
+
+%track
+prog %name = {
+	url = http://www.linux-nis.org/nis/ypbind-mt/index.html
+	version = %version
+	regex = ypbind-mt-(__VER__)\.tar\.bz2
+}
 
 %description
 The Network Information Service (NIS) is a system which provides
@@ -46,8 +52,10 @@ network.
 
 %prep
 %setup -q -n ypbind-mt-%version
-%patch0 -p0 -b .broadcast
-%patch2 -p1 -b .fixit
+%apply_patches
+aclocal -I m4
+automake -a
+autoconf
 
 %build
 %serverbuild
