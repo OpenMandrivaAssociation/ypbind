@@ -23,6 +23,7 @@ Requires: yp-tools
 BuildRequires: dbus-devel
 BuildRequires: dbus-glib >= 0.60
 BuildRequires: networkmanager-devel
+BuildRequires:	tirpc-devel
 %endif
 
 %track
