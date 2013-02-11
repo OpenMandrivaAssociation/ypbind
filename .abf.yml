@@ -1,5 +1,2 @@
-removed_sources:
-  ypbind-mt-1.29.91.tar.gz: 89eafc3c844aeaefb30d076e502ad64ac4510c90
-  ypbind-mt-1.32.tar.bz2: 8dd60476e368584b7d16d2c478782ada0490f8ca
 sources:
   ypbind-mt-1.36.tar.bz2: da4fddf43da2a8d32bba8de7b8223f512e1003b8
