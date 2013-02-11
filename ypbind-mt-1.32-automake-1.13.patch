@@ -1,18 +1,18 @@
---- ypbind-mt-1.32/configure.in.bero	2013-02-08 14:23:27.866603001 +0100
-+++ ypbind-mt-1.32/configure.in	2013-02-08 14:25:03.763494356 +0100
+--- ypbind-mt-1.36/configure.in.0001~	2013-02-11 16:46:43.645348859 +0100
++++ ypbind-mt-1.36/configure.in	2013-02-11 16:47:11.357030127 +0100
 @@ -1,7 +1,7 @@
  dnl Process this file with autoconf to produce a configure script.
 -AC_INIT(src/ypbind-mt.c)
--AM_INIT_AUTOMAKE(ypbind-mt, 1.32)
+-AM_INIT_AUTOMAKE(ypbind-mt, 1.36)
 -AM_CONFIG_HEADER(config.h)
-+AC_INIT(ypbind-mt, 1.32)
++AC_INIT(ypbind-mt, 1.36)
 +AM_INIT_AUTOMAKE
 +AC_CONFIG_HEADERS([config.h])
  AC_PREFIX_DEFAULT(/usr)
  
  AC_SUBST(PACKAGE)
---- ypbind-mt-1.32/lib/Makefile.am.bero	2013-02-08 14:25:14.374371745 +0100
-+++ ypbind-mt-1.32/lib/Makefile.am	2013-02-08 14:25:20.315303020 +0100
+--- ypbind-mt-1.36/lib/Makefile.am.0001~	2006-08-30 15:38:56.000000000 +0200
++++ ypbind-mt-1.36/lib/Makefile.am	2013-02-11 16:46:43.645348859 +0100
 @@ -15,6 +15,6 @@ libcompat_a_SOURCES = dns_hosts.c res_op
  libcompat_a_LIBADD = @LIBOBJS@
  
