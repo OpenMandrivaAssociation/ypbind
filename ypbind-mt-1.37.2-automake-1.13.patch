@@ -1,0 +1,20 @@
+--- ypbind-mt-1.37.2/configure.in.orig	2013-03-10 13:22:01.926088224 -0400
++++ ypbind-mt-1.37.2/configure.in	2013-03-10 13:22:55.618912306 -0400
+@@ -1,7 +1,7 @@
+ dnl Process this file with autoconf to produce a configure script.
+ AC_INIT(src/ypbind-mt.c)
+ AM_INIT_AUTOMAKE(ypbind-mt, 1.37.2)
+-AM_CONFIG_HEADER(config.h)
++AC_CONFIG_HEADERS(config.h)
+ AC_PREFIX_DEFAULT(/usr)
+ 
+ AC_SUBST(PACKAGE)
+@@ -121,7 +121,7 @@
+ AC_SUBST(LIBSYSTEMD_DAEMON)
+ 
+ dnl internationalization macros
+-AM_GNU_GETTEXT_VERSION
++AM_GNU_GETTEXT_VERSION(0.17)
+ AM_GNU_GETTEXT([external])
+ 
+ dnl By default, don't send a ping to all server at the same time

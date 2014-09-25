@@ -1,30 +1,48 @@
-# Rebuild with  '--with dbus' to enbale dbus/Netwrokmanager support
+# Rebuild with  '--with dbus' to enable dbus/Networkmanager support
 %global nodbus_support %{?_with_dbus: %nil}%{?!_with_dbus: --disable-dbus-nm}
+
+# Location where helper scripts are located
+%define scripts_path /usr/lib/%{name}
 
 Summary:	The NIS daemon which binds NIS clients to an NIS domain
 Name:		ypbind
-Version:	1.36
-Release:	7
+Version:	1.37.2
+Release:	1
 Epoch:		3
 License:	GPL
 Group:		System/Servers
 URL:		http://www.linux-nis.org/nis/ypbind-mt/index.html
-Source0:	http://www.linux-nis.org/download/ypbind-mt/ypbind-mt-%version.tar.bz2
-Source1:	ypbind.init
-Source2:	yp.conf
-Patch0:		ypbind-mt-1.32-link-tirpc.patch
-Patch1:		ypbind-mt-1.32-automake-1.13.patch
-Patch2:		ypbind-1.11-gettextdomain.patch
+Source0:	http://www.linux-nis.org/download/ypbind-mt/ypbind-mt-%{version}.tar.bz2
+
+Source3:	ypbind.service
+Source4:	ypbind-pre-setdomain
+Source5:	ypbind-post-waitbind
+
+# Needed for autoreconf for patch 3
+Patch0:		ypbind-mt-1.37.2-automake-1.13.patch
+
+# Fedora patches
+Patch1:		ypbind-1.11-gettextdomain.patch
+Patch2:		ypbind-helpman.patch
+Patch3:		ypbind-systemdso.patch
+
+Patch4:		ypbind-mt-1.32-link-tirpc.patch
+
 Requires(post):	rpm-helper
-Requires(preun):	rpm-helper
+Requires(preun): rpm-helper
 Requires:	rpcbind
 Requires:	yp-tools
 %if %{?nodbus_support: 0}%{?!nodbus_support: 1}
-BuildRequires:	dbus-devel
-BuildRequires:	dbus-glib >= 0.60
-BuildRequires:	networkmanager-devel
+BuildRequires:	pkgconfig(dbus-1)
+BuildRequires:	dbus-glib
+BuildRequires:	pkgconfig(NetworkManager)
 %endif
-BuildRequires:	tirpc-devel
+# autoconf, automake, systemd-devel needed for patch 3
+# gettext-devel also needed for /usr/bin/autopoint
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	gettext-devel
+BuildRequires:	pkgconfig(libsystemd)
 
 %track
 prog %name = {
@@ -52,125 +70,41 @@ you'll also need to install the ypserv package to a machine on your
 network.
 
 %prep
-%setup -q -n ypbind-mt-%version
+%setup -q -n ypbind-mt-%{version}
 %apply_patches
-aclocal -I m4
-automake -a
-autoconf
 
 %build
-%serverbuild
+# autoreconf needed for patch 3
+autoreconf -fi
 %configure --sbindir=/sbin %{?nodbus_support}
 %make
 
 %install
-%makeinstall sbindir=$RPM_BUILD_ROOT/sbin
+%makeinstall sbindir=%{buildroot}/sbin
 
-mkdir -p $RPM_BUILD_ROOT%{_initrddir}
-install -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/ypbind
-install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/yp.conf
-mkdir -p $RPM_BUILD_ROOT/var/yp/binding
+mkdir -p %{buildroot}%{_sysconfdir}
+install -m 644 etc/yp.conf %{buildroot}%{_sysconfdir}/yp.conf
+mkdir -p %{buildroot}/var/yp/binding
 
-perl -pi -e "s|/etc/rc.d/init.d|%{_initrddir}|" $RPM_BUILD_ROOT%{_initrddir}/*
+mkdir -p %{buildroot}%{_unitdir}
+install -m 644 %{SOURCE3} %{buildroot}%{_unitdir}/ypbind.service
+mkdir -p %{buildroot}%{scripts_path}
+install -m 755 %{SOURCE4} %{buildroot}%{scripts_path}/ypbind-pre-setdomain
+install -m 755 %{SOURCE5} %{buildroot}%{scripts_path}/ypbind-post-waitbind
 
 %find_lang %{name}
 
 %post
-%_post_service ypbind
+%_post_service %{name}
 
 %preun
-%_preun_service ypbind
+%_preun_service %{name}
 
 %files -f %{name}.lang
-%defattr(-,root,root)
-%attr(755, root, root) /sbin/ypbind
+%attr(755, root, root) /sbin/%{name}
 %{_mandir}/*/*
-%{_initrddir}/*
+%{_unitdir}/%{name}.service
+%{scripts_path}/*
 %config(noreplace) %{_sysconfdir}/yp.conf
 %dir /var/yp/binding
 %doc README ChangeLog AUTHORS THANKS NEWS
-
-
-
-
-
-%changelog
-* Sat May 07 2011 Oden Eriksson <oeriksson@mandriva.com> 3:1.29.91-5mdv2011.0
-+ Revision: 671948
-- mass rebuild
-
-* Sat Dec 04 2010 Oden Eriksson <oeriksson@mandriva.com> 3:1.29.91-4mdv2011.0
-+ Revision: 608268
-- rebuild
-
-* Mon Nov 30 2009 Olivier Thauvin <nanardon@mandriva.org> 3:1.29.91-3mdv2010.1
-+ Revision: 471694
-- add usefull files as doc (NEWS, ChangeLog, ...)
-
-* Mon Nov 30 2009 Olivier Thauvin <nanardon@mandriva.org> 3:1.29.91-2mdv2010.1
-+ Revision: 471642
-- patch0: ensure server list is updated when using broadcast (#56029)
-
-* Mon Nov 23 2009 Olivier Thauvin <nanardon@mandriva.org> 3:1.29.91-1mdv2010.1
-+ Revision: 469164
-- 1.29.91
-
-* Sat May 09 2009 Olivier Thauvin <nanardon@mandriva.org> 3:1.20.5-2mdv2010.0
-+ Revision: 373774
-- requires rpcbind instead portmap since portmap has been trashed
-
-* Sun Mar 22 2009 Oden Eriksson <oeriksson@mandriva.com> 3:1.20.5-1mdv2009.1
-+ Revision: 360450
-- 1.20.5
-
-* Tue Dec 23 2008 Oden Eriksson <oeriksson@mandriva.com> 3:1.20.4-2mdv2009.1
-+ Revision: 317953
-- rediffed one fuzzy patch
-
-* Sat Aug 16 2008 Olivier Thauvin <nanardon@mandriva.org> 3:1.20.4-1mdv2009.0
-+ Revision: 272494
-- 1.20.4
-
-* Tue Mar 04 2008 Oden Eriksson <oeriksson@mandriva.com> 3:1.20.2-4mdv2008.1
-+ Revision: 178844
-- rebuild
-
-  + Olivier Blin <oblin@mandriva.com>
-    - restore BuildRoot
-
-  + Thierry Vignaud <tv@mandriva.org>
-    - kill re-definition of %%buildroot on Pixel's request
-
-* Thu Jun 07 2007 Anssi Hannula <anssi@mandriva.org> 3:1.20.2-3mdv2008.0
-+ Revision: 36219
-- rebuild with correct optflags
-
-  + Olivier Thauvin <nanardon@mandriva.org>
-    - requires portmapper instead portmap
-
-
-* Fri Feb 16 2007 Olivier Thauvin <nanardon@mandriva.org> 1.20.2-1mdv2007.0
-+ Revision: 121971
-- 1.20.2
-- make dbus support optional and disable by default
-
-* Sat Jul 22 2006 Olivier Thauvin <nanardon@mandriva.org> 3:1.19.1-4mdv2007.0
-+ Revision: 41840
-- rebuild
-- Import ypbind
-
-* Mon Jan 09 2006 Olivier Blin <oblin@mandriva.com> 1.19.1-3mdk
-- add LSB comments in initscript
-- fix Requires post/preun
-
-* Mon Jul 18 2005 Olivier Thauvin <nanardon@mandriva.org> 1.19-2mdk
-- rpmlint fix
-
-* Mon Jul 18 2005 Olivier Thauvin <nanardon@mandriva.org> 1.19-1mdk
-- 1.19.1
-- fix wrong conrestart check
-- remove patch3, not need anymore
-
-* Fri Aug 27 2004 Frederic Lepied <flepied@mandrakesoft.com> 1.17.3-1mdk
-- new version
-

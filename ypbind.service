@@ -1,0 +1,20 @@
+# For details how to adjust this file or change daemon settings, please, read ypbind(8).
+[Unit]
+Description=NIS/YP (Network Information Service) Clients to NIS Domain Binder
+Requires=rpcbind.service
+After=syslog.target network.target rpcbind.service ypserv.service NetworkManager-wait-online.service
+Before=systemd-user-sessions.service
+
+[Service]
+Type=notify
+NotifyAccess=all
+EnvironmentFile=-/etc/sysconfig/network
+EnvironmentFile=-/etc/sysconfig/ypbind
+ExecStartPre=/usr/lib/ypbind/ypbind-pre-setdomain
+ExecStartPre=-/usr/sbin/setsebool allow_ypbind=1 
+ExecStart=/usr/sbin/ypbind -n $OTHER_YPBIND_OPTS
+ExecStartPost=/usr/lib/ypbind/ypbind-post-waitbind
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
