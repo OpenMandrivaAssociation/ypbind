@@ -43,6 +43,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(libsystemd)
+BuildRequires:	tirpc-devel
 
 %track
 prog %name = {
