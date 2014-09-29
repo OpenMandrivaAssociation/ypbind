@@ -31,7 +31,9 @@ Patch4:		ypbind-mt-1.32-link-tirpc.patch
 Requires(post):	rpm-helper
 Requires(preun): rpm-helper
 Requires:	rpcbind
-Requires:	yp-tools
+# yp-tools need to be fixed
+# with tirpc support
+#Requires:	yp-tools
 %if %{?nodbus_support: 0}%{?!nodbus_support: 1}
 BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	dbus-glib
