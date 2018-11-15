@@ -47,13 +47,6 @@ BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	tirpc-devel
 
-%track
-prog %name = {
-	url = http://www.linux-nis.org/download/ypbind-mt/
-	version = %version
-	regex = ypbind-mt-(__VER__)\.tar\.bz2
-}
-
 %description
 The Network Information Service (NIS) is a system which provides
 network information (login names, passwords, home directories, group
