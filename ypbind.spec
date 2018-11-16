@@ -45,7 +45,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gettext-devel
 BuildRequires:	pkgconfig(libsystemd)
-BuildRequires:	tirpc-devel
+BuildRequires:	pkgconfig(libtirpc)
 
 %description
 The Network Information Service (NIS) is a system which provides
