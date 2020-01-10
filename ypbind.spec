@@ -67,7 +67,7 @@ network.
 
 %prep
 %setup -q -n ypbind-mt-%{version}
-%apply_patches
+%autopatch -p1
 
 %build
 # autoreconf needed for patch 3
