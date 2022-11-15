@@ -6,27 +6,19 @@
 
 Summary:	The NIS daemon which binds NIS clients to an NIS domain
 Name:		ypbind
-Version:	1.37.2
-Release:	5
-Epoch:		3
+Version:	2.7.2
+Release:	1
 License:	GPL
 Group:		System/Servers
-URL:		http://www.linux-nis.org/nis/ypbind-mt/index.html
-Source0:	http://www.linux-nis.org/download/ypbind-mt/ypbind-mt-%{version}.tar.bz2
+URL:		http://www.linux-nis.org/
+Source0:	https://github.com/thkukuk/ypbind-mt/releases/download/v%{version}/ypbind-mt-%{version}.tar.xz
 
 Source3:	ypbind.service
 Source4:	ypbind-pre-setdomain
 Source5:	ypbind-post-waitbind
 
-# Needed for autoreconf for patch 3
-Patch0:		ypbind-mt-1.37.2-automake-1.13.patch
-
 # Fedora patches
 Patch1:		ypbind-1.11-gettextdomain.patch
-Patch2:		ypbind-helpman.patch
-Patch3:		ypbind-systemdso.patch
-
-Patch4:		ypbind-mt-1.32-link-tirpc.patch
 
 Requires(post):	rpm-helper
 Requires(preun): rpm-helper
