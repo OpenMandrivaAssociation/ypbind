@@ -10,7 +10,7 @@ Version:	2.7.2
 Release:	1
 License:	GPL
 Group:		System/Servers
-URL:		http://www.linux-nis.org/
+URL:		https://www.linux-nis.org/
 Source0:	https://github.com/thkukuk/ypbind-mt/releases/download/v%{version}/ypbind-mt-%{version}.tar.xz
 
 Source3:	ypbind.service
